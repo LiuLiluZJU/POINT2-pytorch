@@ -8,6 +8,8 @@ import torch.nn as nn
 from torch import optim
 from unet import UNet
 
+from lib.dataset.alignDataSet import AlignDataSet
+
 dir_data = './data/'
 dir_checkpoint = '.checkpoints/'
 
@@ -37,7 +39,8 @@ def train_net(net,
               val_percent=0.1,
               save_cp=True,
               img_scale=0.5):
-    dataset = 
+    dataset = AlignDataSet(dir_data)
+    
 
 if __name__ == '__main__':
     args = get_args()
