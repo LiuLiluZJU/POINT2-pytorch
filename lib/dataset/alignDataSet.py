@@ -15,6 +15,10 @@ class AlignDataSet(Base_DataSet):
     @property
     def name(self):
         return 'AlignDataSet'
+
+    @property
+    def num_samples(self):
+        return self.dataset_size
     
     def get_data_path(self, root, index_name):
         data_path = os.path.join(root, index_name)

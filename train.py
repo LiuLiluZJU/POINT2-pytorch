@@ -9,6 +9,7 @@ from torch import optim
 from unet import UNet
 
 from lib.dataset.alignDataSet import AlignDataSet
+from torch.utils.data import DataLoader, random_split
 
 dir_data = './data/'
 dir_checkpoint = '.checkpoints/'
@@ -40,7 +41,37 @@ def train_net(net,
               save_cp=True,
               img_scale=0.5):
     dataset = AlignDataSet(dir_data)
-    
+    n_val = int(len(dataset) * val_percent)
+    n_train = len(dataset) - n_val
+    train, val = random_split(dataset, [n_train, n_val])
+
+    train_loader = DataLoader(train, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True)
+    val_loader = DataLoader(val, batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True, drop_last=True)
+
+    optimizer = optim.SGD(net.parameters(), lr=lr, weight_decay=1e-8, momentum=0.9)
+    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=2)
+
+    criterion = nn.BCEWithLogitsLoss()
+
+    for epoch in range(epochs):
+        net.train()
+
+        epoch_loss = 0
+        for batch in train_loader:
+            input_drr1 = batch[0]
+            input_drr2 = batch[1]
+
+            input_drr1 = input_drr1.to(device=device, dtype=torch.float32)
+            input_drr2 = input_drr2.to(device=device, dtype=torch.float32)
+
+            loss = criterion(masks_pred, true_masks)
+            epoch_loss += loss.item()
+
+            optimizer.zero_grad()
+            loss.backward()
+            nn.utils.clip_grad_value_(net.parameters(), 0.1)
+            optimizer.step()
+
 
 if __name__ == '__main__':
     args = get_args()
