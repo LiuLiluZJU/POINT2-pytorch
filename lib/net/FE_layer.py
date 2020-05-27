@@ -15,7 +15,7 @@ class FE_layer(nn.Module):
     def forward(self, feature_map, single_POI):
         feature_map = self.padding(feature_map)
         # print("size:", feature_map.shape)
-        print(single_POI[0] + 2 * self.patch_neighbor_size)
+        # print(single_POI[0] + 2 * self.patch_neighbor_size)
         feature_kernel = feature_map[:, :, single_POI[0] : single_POI[0] + 2 * self.patch_neighbor_size + 1, \
             single_POI[1] : single_POI[1] + 2 * self.patch_neighbor_size + 1]
         feature_kernel = feature_kernel.clone()
