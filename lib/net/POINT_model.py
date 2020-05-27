@@ -23,6 +23,8 @@ class PNet(nn.Module):
         self.input_drr1 = input1
         self.input_drr2 = input2
         self.correspondence_2D = correspondence_2D
+        self.batch_size = self.correspondence_2D.shape[0]
+        self.point_num = self.correspondence_2D.shape[2]
 
     def generate_score_map_gt(self, single_POI, size_H, size_W):
 
@@ -55,21 +57,49 @@ class PNet(nn.Module):
         self.f_size_W = self.feature_map1.shape[3]
         self.factor_H = self.i_size_H / self.f_size_H
         self.factor_W = self.i_size_W / self.f_size_W
+        print("self.eval", self.training)
+        
+        if not self.training:
+            # score_map_b_list = []
+            for batch_index in range(self.batch_size):
+                score_map_c_list = []
+                for point_index in range(self.point_num):
+                    if self.correspondence_2D[batch_index][0][point_index][4] == -1:
+                        continue
+                    feature_map1_divided = self.feature_map1[batch_index].unsqueeze(0)
+                    drr_POI = self.correspondence_2D[batch_index][0][point_index][0 : 4].clone()
+                    drr_POI[0] = torch.floor(drr_POI[0] / self.factor_H)  # No need to multiply factor
+                    drr_POI[1] = torch.floor(drr_POI[1] / self.factor_W)  # No need to multiply factor
+                    drr_POI[2] = torch.floor(drr_POI[2] / self.factor_H)  # No need to multiply factor
+                    drr_POI[3] = torch.floor(drr_POI[3] / self.factor_W)  # No need to multiply factor
+                    drr_POI = drr_POI.int()
+                    print("drr_POI:", drr_POI)
+                    feature_kernel = self.FE_layer(feature_map1_divided, drr_POI)
+                    feature_map2_divided = self.feature_map2[batch_index].unsqueeze(0)
+                    score_map = F.conv2d(feature_map2_divided, feature_kernel, padding=self.patch_neighbor_size)
+                    score_map_c_list.append(score_map.squeeze(1))
+                score_map_c_stack = torch.stack(score_map_c_list, dim=1)
+                print("score_map_c_stack size:", score_map_c_stack.shape)
+            #     score_map_b_list.append(score_map_c_stack)
+            # score_map_b_stack = torch.stack(score_map_b_list, dim=0)
     
     def backward_basic(self):
         self.loss_total = 0
-        batch_size = self.correspondence_2D.shape[0]
-        for batch_index in range(self.correspondence_2D.shape[0]):
+        for batch_index in range(self.batch_size):
             loss_batch = 0
             point_count = 0
-            for point_index in range(self.correspondence_2D.shape[2]):
+            for point_index in range(self.point_num):
 
                 if self.correspondence_2D[batch_index][0][point_index][4] == -1:
                     continue
 
                 feature_map1_divided = self.feature_map1[batch_index].unsqueeze(0)
                 drr_POI = self.correspondence_2D[batch_index][0][point_index][0 : 4].clone()
-                drr_POI = torch.floor(drr_POI / self.factor_H).int()  # No need to multiply factor
+                drr_POI[0] = torch.floor(drr_POI[0] / self.factor_H)  # No need to multiply factor
+                drr_POI[1] = torch.floor(drr_POI[1] / self.factor_W)  # No need to multiply factor
+                drr_POI[2] = torch.floor(drr_POI[2] / self.factor_H)  # No need to multiply factor
+                drr_POI[3] = torch.floor(drr_POI[3] / self.factor_W)  # No need to multiply factor
+                drr_POI = drr_POI.int()
                 # print("self.factor_H", self.factor_H)
                 # print("drr_POI:", drr_POI)
                 # print("shape:", feature_map1_divided.shape)
@@ -88,7 +118,7 @@ class PNet(nn.Module):
             loss_batch = loss_batch / point_count
             self.loss_total += loss_batch
         
-        self.loss_total = self.loss_total / batch_size
+        self.loss_total = self.loss_total / self.batch_size
         print("loss:", self.loss_total)
         self.loss_total.backward()
     

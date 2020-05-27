@@ -36,12 +36,19 @@ class AlignDataSet(Base_DataSet):
         hdf5.close()
         return input_drr1, input_drr2, correspondence_2D
 
+    def preprocess(self, input_drr):
+        # Normalization
+        input_drr = (input_drr - np.min(input_drr)) / (np.max(input_drr) - np.min(input_drr))
+        return input_drr
+
     '''
     generate batch
     '''
     def pull_item(self, item):
         data_path = self.get_data_path(self.dataset_root, self.data_list[item])
         input_drr1, input_drr2, correspondence_2D = self.load_file(data_path)
+        input_drr1 = self.preprocess(input_drr1)
+        input_drr2 = self.preprocess(input_drr2)
 
         return input_drr1, input_drr2, correspondence_2D
 
