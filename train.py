@@ -52,29 +52,27 @@ def train_net(net,
     optimizer = optim.SGD(net.parameters(), lr=lr, weight_decay=1e-8, momentum=0.9)
     # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=2)
 
-    criterion = nn.BCEWithLogitsLoss()
-
     for epoch in range(epochs):
         net.train()
-
+        
         epoch_loss = 0
         for batch in train_loader:
+            input_drr1 = batch[0].to(device=device, dtype=torch.float32)
+            input_drr2 = batch[1].to(device=device, dtype=torch.float32)
+            correspondence_2D = batch[2].to(device=device, dtype=torch.float32)
+            # print("shape:", input_drr1.shape, input_drr2.shape, correspondence_2D.shape)
 
+            net.set_input(input_drr1, input_drr2, correspondence_2D)
 
-            loss = criterion(masks_pred, true_masks)
-            epoch_loss += loss.item()
+            net.optimize_parameters()
 
-            optimizer.zero_grad()
-            loss.backward()
-            nn.utils.clip_grad_value_(net.parameters(), 0.1)
-            optimizer.step()
 
 
 if __name__ == '__main__':
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    net = PNet(n_channels=3, n_classes=1, bilinear=True)
+    net = PNet(n_channels=1, bilinear=True)
 
     net.to(device=device)
 
