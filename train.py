@@ -6,7 +6,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch import optim
-from unet import UNet
+
+from lib.net.POINT_model import PNet
 
 from lib.dataset.alignDataSet import AlignDataSet
 from torch.utils.data import DataLoader, random_split
@@ -58,11 +59,7 @@ def train_net(net,
 
         epoch_loss = 0
         for batch in train_loader:
-            input_drr1 = batch[0]
-            input_drr2 = batch[1]
 
-            input_drr1 = input_drr1.to(device=device, dtype=torch.float32)
-            input_drr2 = input_drr2.to(device=device, dtype=torch.float32)
 
             loss = criterion(masks_pred, true_masks)
             epoch_loss += loss.item()
@@ -77,7 +74,7 @@ if __name__ == '__main__':
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    net = UNet(n_channels=3, n_classes=1, bilinear=True)
+    net = PNet(n_channels=3, n_classes=1, bilinear=True)
 
     net.to(device=device)
 

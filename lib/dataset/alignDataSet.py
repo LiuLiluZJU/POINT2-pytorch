@@ -29,8 +29,10 @@ class AlignDataSet(Base_DataSet):
         hdf5 = h5py.File(data_path, 'r')
         input_drr1 = np.asarray(hdf5['input_drr1'])
         input_drr2 = np.asarray(hdf5['input_drr2'])
+        correspondence_2D = np.array(h5py['correspondence_2D'])
         input_drr1 = np.expand_dims(input_drr1, 0)
         input_drr2 = np.expand_dims(input_drr2, 0)
+        correspondence_2D = np.expand_dims(correspondence_2D, 0)
         hdf5.close()
         return input_drr1, input_drr2
 
@@ -39,9 +41,9 @@ class AlignDataSet(Base_DataSet):
     '''
     def pull_item(self, item):
         data_path = self.get_data_path(self.dataset_root, self.data_list[item])
-        input_drr1, input_drr2 = self.load_file(data_path)
+        input_drr1, input_drr2, correspondence_2D = self.load_file(data_path)
 
-        return input_drr1, input_drr2
+        return input_drr1, input_drr2, correspondence_2D
 
     
 
