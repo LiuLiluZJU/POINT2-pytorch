@@ -18,8 +18,8 @@ class PNet(nn.Module):
         self.padding = nn.ZeroPad2d(patch_neighbor_size)
         # self.loss = nn.BCELoss()
         self.criterion = nn.BCEWithLogitsLoss()
-        # self.sigmoid = nn.sigmoid()
-        self.optimizer = torch.optim.Adam(self.UNet.parameters(), 0.0001, weight_decay=1e-8)
+        self.batchnorm = nn.BatchNorm2d(1)
+        self.optimizer = torch.optim.Adam(self.UNet.parameters(), 0.01, weight_decay=1e-8)
     
     def set_input(self, input1, input2, correspondence_2D):
         self.input_drr1 = input1
@@ -139,6 +139,7 @@ class PNet(nn.Module):
                 # print("shape:", feature_kernel.shape)
                 feature_map2_divided = self.feature_map2[batch_index].unsqueeze(0)
                 score_map = F.conv2d(feature_map2_divided, feature_kernel)
+                score_map = self.batchnorm(score_map)
                 score_map_unpadded = score_map.clone()
                 score_map = self.padding(score_map)
                 # print("score_map size:", score_map.shape)
