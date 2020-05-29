@@ -120,7 +120,6 @@ class PNet(nn.Module):
             loss_batch = 0
             point_count = 0
             for point_index in range(self.point_num):
-
                 if self.correspondence_2D[batch_index][0][point_index][4] == -1:
                     continue
                 
@@ -149,8 +148,9 @@ class PNet(nn.Module):
                 # Eular distance loss
                 score_map_squeezed = torch.squeeze(score_map)
                 score_map_flattened = score_map_squeezed.view(-1)
-                max_index_flattened = score_map_flattened.argmax(dim=0)
-                max_index = torch.tensor([max_index_flattened / self.f_size_H, max_index_flattened % self.f_size_W]).cuda()
+                max_index_flattened = score_map_flattened.argmax(dim=0).float().requires_grad_(True)
+                max_index = torch.tensor([max_index_flattened / self.f_size_H, max_index_flattened % self.f_size_W]).cuda().requires_grad_(True)
+                # print("requires grad:", score_map_squeezed.requires_grad, max_index_flattened.requires_grad, max_index.requires_grad)
                 print("max_index:", max_index)
                 eular_distance = torch.sqrt((max_index[0].float() - drr_POI[2].float()) ** 2 + (max_index[1].float() - drr_POI[3].float()) ** 2)
                 print("eular distance:", eular_distance)
@@ -158,7 +158,7 @@ class PNet(nn.Module):
                 
                 # Sum
                 loss_batch += eular_distance
-                loss_batch += self.criterion(score_map, score_map_gt)
+                # loss_batch += self.criterion(score_map, score_map_gt)
                 point_count += 1
 
                 # -------------- Show ---------------- #
@@ -200,6 +200,7 @@ class PNet(nn.Module):
         self.loss_total = self.loss_total / self.batch_size
         print("loss:", self.loss_total)
         self.loss_total.backward()
+        print(self.UNet.up1.conv.double_conv[0].weight.grad)
     
     def optimize_parameters(self):
         # forward
