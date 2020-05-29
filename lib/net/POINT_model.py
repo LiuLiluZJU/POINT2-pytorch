@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 class PNet(nn.Module):
-    def __init__(self, n_channels, bilinear=True, patch_neighbor_size=10):
+    def __init__(self, n_channels, bilinear=True, patch_neighbor_size=5):
         super(PNet, self).__init__()
         self.n_channels = n_channels
         self.bilinear = bilinear
