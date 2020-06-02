@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 class PNet(nn.Module):
-    def __init__(self, n_channels, bilinear=True, patch_neighbor_size=5):
+    def __init__(self, n_channels, bilinear=True, patch_neighbor_size=20):
         super(PNet, self).__init__()
         self.n_channels = n_channels
         self.bilinear = bilinear
@@ -19,7 +19,7 @@ class PNet(nn.Module):
         # self.loss = nn.BCELoss()
         self.criterion = nn.BCEWithLogitsLoss()
         self.batchnorm = nn.BatchNorm2d(1)
-        self.optimizer = torch.optim.Adam(self.UNet.parameters(), 0.01, weight_decay=1e-8)
+        self.optimizer = torch.optim.Adam(self.UNet.parameters(), 0.001, weight_decay=1e-8)
     
     def set_input(self, input1, input2, correspondence_2D):
         self.input_drr1 = input1
@@ -137,10 +137,10 @@ class PNet(nn.Module):
                 feature_kernel = self.FE_layer(feature_map1_divided, drr_POI)
                 # print("shape:", feature_kernel.shape)
                 feature_map2_divided = self.feature_map2[batch_index].unsqueeze(0)
-                score_map = F.conv2d(feature_map2_divided, feature_kernel)
+                score_map = F.conv2d(feature_map2_divided, feature_kernel, padding=self.patch_neighbor_size)
                 score_map = self.batchnorm(score_map)
                 score_map_unpadded = score_map.clone()
-                score_map = self.padding(score_map)
+                # score_map = self.padding(score_map)
                 # print("score_map size:", score_map.shape)
                 # score_map = self.sigmoid(score_map)
                 score_map_gt = self.generate_score_map_gt(drr_POI, self.f_size_H, self.f_size_W)
@@ -151,48 +151,73 @@ class PNet(nn.Module):
                 max_index_flattened = score_map_flattened.argmax(dim=0).float().requires_grad_(True)
                 max_index = torch.tensor([max_index_flattened / self.f_size_H, max_index_flattened % self.f_size_W]).cuda().requires_grad_(True)
                 # print("requires grad:", score_map_squeezed.requires_grad, max_index_flattened.requires_grad, max_index.requires_grad)
-                print("max_index:", max_index)
+                # print("max_index:", max_index)
                 eular_distance = torch.sqrt((max_index[0].float() - drr_POI[2].float()) ** 2 + (max_index[1].float() - drr_POI[3].float()) ** 2)
                 print("eular distance:", eular_distance)
-                print("original eular distance:", torch.sqrt((drr_POI[0].float() - drr_POI[2].float()) ** 2 + (drr_POI[1].float() - drr_POI[3].float()) ** 2))
+                # print("original eular distance:", torch.sqrt((drr_POI[0].float() - drr_POI[2].float()) ** 2 + (drr_POI[1].float() - drr_POI[3].float()) ** 2))
                 
                 # Sum
                 loss_batch += eular_distance
-                # loss_batch += self.criterion(score_map, score_map_gt)
+                loss_batch += self.criterion(score_map, score_map_gt)
                 point_count += 1
 
                 # -------------- Show ---------------- #
                 # Find index of max value
-                # score_map_squeezed = torch.squeeze(score_map)
-                # score_map_flattened = score_map_squeezed.view(-1)
-                # max_index_flattened = score_map_flattened.argmax(dim=0)
-                # max_index = torch.Tensor([max_index_flattened / self.f_size_H, max_index_flattened % self.f_size_W]).cuda()
-                # max_index = max_index.int()
-                # print("eular distance:", (max_index[0] - drr_POI[2]) ** 2 + (max_index[1] - drr_POI[3]) ** 2)
-                # print("original eular distance:", (drr_POI[0] - drr_POI[2]) ** 2 + (drr_POI[1] - drr_POI[3]) ** 2)
-                
-                # score_map_squeezed_show = score_map_squeezed.cpu().data.numpy()
-                # score_map_gt_show = torch.squeeze(score_map_gt)
-                # score_map_gt_show = score_map_gt_show.cpu().data.numpy()
-                # feature_map2_divided_show = torch.mean(feature_map2_divided, dim=1)
-                # feature_map2_divided_show = torch.squeeze(feature_map2_divided_show)
-                # feature_map2_divided_show = feature_map2_divided_show.cpu().data.numpy()
-                # max_index_show = max_index.cpu().data.numpy()
-                # drr_POI_show = drr_POI.cpu().data.numpy()
-                # plt.subplot(221)
-                # plt.imshow(score_map_squeezed_show, cmap='gray')
-                # plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='o')
-                # plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='+')
-                # plt.scatter([max_index_show[1]], [max_index_show[0]], marker='x')
-                # plt.subplot(222)
-                # plt.imshow(score_map_gt_show, cmap='gray')
+                score_map_squeezed = torch.squeeze(score_map)
+                score_map_flattened = score_map_squeezed.view(-1)
+                max_index_flattened = score_map_flattened.argmax(dim=0)
+                max_index = torch.tensor([max_index_flattened / self.f_size_H, max_index_flattened % self.f_size_W]).cuda()
+                max_index = max_index.int()
+                print("eular distance:", (max_index[0] - drr_POI[2]) ** 2 + (max_index[1] - drr_POI[3]) ** 2)
+                print("original eular distance:", (drr_POI[0] - drr_POI[2]) ** 2 + (drr_POI[1] - drr_POI[3]) ** 2)
+
+                score_map_squeezed_show = score_map_squeezed.cpu().data.numpy()
+                score_map_gt_show = torch.squeeze(score_map_gt)
+                score_map_gt_show = score_map_gt_show.cpu().data.numpy()
+                feature_map1_divided_show = torch.mean(feature_map1_divided, dim=1)
+                feature_map1_divided_show = torch.squeeze(feature_map1_divided_show)
+                feature_map1_divided_show = feature_map1_divided_show.cpu().data.numpy()
+                feature_map2_divided_show = torch.mean(feature_map2_divided, dim=1)
+                feature_map2_divided_show = torch.squeeze(feature_map2_divided_show)
+                feature_map2_divided_show = feature_map2_divided_show.cpu().data.numpy()
+                max_index_show = max_index.cpu().data.numpy()
+                drr_POI_show = drr_POI.cpu().data.numpy()
+                input1 = torch.squeeze(self.input_drr1[batch_index])
+                input1_show = input1.cpu().data.numpy()
+                input2 = torch.squeeze(self.input_drr2[batch_index])
+                input2_show = input2.cpu().data.numpy()
+                plt.subplot(231)
+                plt.imshow(input1_show, cmap='gray')
+                plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+')
+                plt.title('DRR1')
+                plt.subplot(232)
+                plt.imshow(feature_map1_divided_show, cmap='gray')
+                plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+')
+                plt.title('feature map1')
+                plt.subplot(233)
+                plt.imshow(score_map_gt_show, cmap='gray')
+                plt.title('point mask')
+                plt.subplot(234)
+                plt.imshow(input2_show, cmap='gray')
+                plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
+                plt.title('DRR2')
+                plt.subplot(235)
+                plt.imshow(feature_map2_divided_show, cmap='gray')
+                plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
+                plt.title('feature map2')
+                plt.subplot(236)
+                plt.imshow(score_map_squeezed_show, cmap='gray')
+                plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+', cmap='orange')
+                plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x', cmap='orange')
+                plt.scatter([max_index_show[1]], [max_index_show[0]], marker='o', cmap='green')
+                plt.title('score map')
+
                 # plt.subplot(223)
                 # score_map_unpadded = torch.squeeze(score_map_unpadded)
                 # score_map_unpadded_show = score_map_unpadded.cpu().data.numpy()
                 # plt.imshow(score_map_unpadded_show, cmap='gray')
-                # plt.subplot(224)
-                # plt.imshow(feature_map2_divided_show, cmap='gray')
-                # plt.show()
+
+                plt.show()
             
             loss_batch = loss_batch / point_count
             self.loss_total += loss_batch
@@ -200,7 +225,7 @@ class PNet(nn.Module):
         self.loss_total = self.loss_total / self.batch_size
         print("loss:", self.loss_total)
         self.loss_total.backward()
-        print(self.UNet.up1.conv.double_conv[0].weight.grad)
+        # print(self.UNet.up1.conv.double_conv[0].weight.grad)
     
     def optimize_parameters(self):
         # forward
