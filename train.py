@@ -79,9 +79,9 @@ if __name__ == '__main__':
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    net = PNet(n_channels=1, bilinear=True)
+    net = PNet(n_channels=1, n_classes=64, bilinear=True)
 
-    net.load_state_dict((torch.load("/root/POINT2-pytorch/checkpoint_29.pth", map_location=device)))
+    # net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_29.pth", map_location=device)))
 
     net.to(device=device)
 
