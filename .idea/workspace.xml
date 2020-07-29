@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7cb7d635-f3de-411d-8bbc-935e7c00a4ed" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/data/1.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/1.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/10.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/10.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/11.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/11.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/12.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/12.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/13.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/13.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/14.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/14.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/15.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/15.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/16.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/16.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/17.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/17.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/18.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/18.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/19.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/19.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/2.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/2.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/20.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/20.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/21.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/21.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/22.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/22.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/23.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/23.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/24.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/24.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/25.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/25.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/26.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/26.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/27.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/27.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/28.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/28.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/29.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/29.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/3.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/3.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/30.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/30.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/31.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/31.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/32.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/32.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/33.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/33.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/34.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/34.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/35.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/35.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/36.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/36.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/37.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/37.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/38.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/38.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/39.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/39.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/4.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/4.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/40.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/40.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/41.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/41.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/42.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/42.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/43.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/43.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/44.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/44.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/45.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/45.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/46.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/46.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/47.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/47.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/48.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/48.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/49.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/49.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/5.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/5.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/50.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/50.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/51.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/51.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/52.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/52.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/53.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/53.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/54.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/54.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/55.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/55.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/56.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/56.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/57.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/57.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/58.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/58.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/59.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/59.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/6.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/6.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/60.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/60.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/61.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/61.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/62.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/62.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/63.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/63.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/64.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/64.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/65.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/65.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/66.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/66.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/7.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/7.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/8.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/8.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/9.h5" beforeDir="false" afterPath="$PROJECT_DIR$/data/9.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/net/POINT_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/net/POINT_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/net/unet_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/net/unet_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1dBAqGNQVODYCMCE13q71RTDp22" />
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../HipHop_2D3Dregistration_Multiview" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="train" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="POINT2-pytorch" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.train" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7cb7d635-f3de-411d-8bbc-935e7c00a4ed" name="Default Changelist" comment="" />
+      <created>1591888301360</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591888301360</updated>
+      <workItem from="1591888304123" duration="39000" />
+      <workItem from="1591923783926" duration="878000" />
+      <workItem from="1591925137705" duration="16000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/POINT2_pytorch$train.coverage" NAME="train Coverage Results" MODIFIED="1591923875557" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

@@ -18,7 +18,7 @@ dir_checkpoint = '.checkpoints/'
 def get_args():
     parser = argparse.ArgumentParser(description='Train the UNet on images and target masks',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-e', '--epochs', metavar='E', type=int, default=30,
+    parser.add_argument('-e', '--epochs', metavar='E', type=int, default=100,
                         help='Number of epochs', dest='epochs')
     parser.add_argument('-b', '--batch-size', metavar='B', type=int, nargs='?', default=1,
                         help='Batch size', dest='batchsize')
@@ -79,20 +79,20 @@ if __name__ == '__main__':
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    net = PNet(n_channels=1, n_classes=64, bilinear=True)
+    net = PNet(device=device, n_channels=1, bilinear=True)
 
-    # net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_29.pth", map_location=device)))
+    net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_99.pth", map_location=device)))
 
     net.to(device=device)
 
     try:
         train_net(net=net,
-                  epochs=args.epochs,
-                  batch_size=args.batchsize,
-                  lr=args.lr,
-                  device=device,
-                  img_scale=args.scale,
-                  val_percent=args.val / 100)
+                    epochs=args.epochs,
+                    batch_size=args.batchsize,
+                    lr=args.lr,
+                    device=device,
+                    img_scale=args.scale,
+                    val_percent=args.val / 100)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         try:
