@@ -12,8 +12,8 @@ from lib.net.POINT_model import PNet
 from lib.dataset.alignDataSet import AlignDataSet
 from torch.utils.data import DataLoader, random_split
 
-dir_data = './data/'
-dir_checkpoint = '.checkpoints/'
+dir_data = "/home/leko/POINT2-data/data_ap/"
+dir_checkpoint = "./checkpoints/"
 
 def get_args():
     parser = argparse.ArgumentParser(description='Train the UNet on images and target masks',
@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
     net = PNet(device=device, n_channels=1, bilinear=True)
 
-    net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_99.pth", map_location=device)))
+    # net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_99.pth", map_location=device)))
 
     net.to(device=device)
 

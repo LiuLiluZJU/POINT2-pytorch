@@ -33,7 +33,7 @@ class AlignDataSet(Base_DataSet):
         correspondence_2D = np.asarray(hdf5['correspondence_2D'])
         input_drr1 = transform.resize(input_drr1, (64, 64))
         input_drr2 = transform.resize(input_drr2, (64, 64))
-        correspondence_2D = correspondence_2D / 8
+        correspondence_2D = correspondence_2D / (200 / 64)
         correspondence_2D = correspondence_2D.astype(np.int64)
         input_drr1 = np.expand_dims(input_drr1, 0)
         input_drr2 = np.expand_dims(input_drr2, 0)

@@ -29,7 +29,7 @@ def gaussian2d(mu, sigma, shape):
 
 
 class PNet(nn.Module):
-    def __init__(self, device, n_channels=1, n_classes=64, bilinear=True, patch_neighbor_size=5):
+    def __init__(self, device, n_channels=1, n_classes=64, bilinear=True, patch_neighbor_size=10):
         super(PNet, self).__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
@@ -178,8 +178,8 @@ class PNet(nn.Module):
 
             for point_index in range(self.point_num):
 
-                if self.correspondence_2D[batch_index][0][point_index][4] == -1:
-                    continue
+                # if self.correspondence_2D[batch_index][0][point_index][4] == -1:
+                #     continue
                 # BCE loss
                 feature_map1_divided = self.feature_map1[batch_index].unsqueeze(0)
                 drr_POI = self.correspondence_2D[batch_index][0][point_index][0 : 4].clone()
@@ -208,7 +208,6 @@ class PNet(nn.Module):
                 # print("max, min:", torch.max(score_map_gt), torch.min(score_map_gt))
 
                 # Eular distance loss
-
                 max_index = self.softArgmax(score_map)
                 max_index_flattened = max_index.view(-1)
                 max_index_flattened = torch.flip(max_index_flattened, dims=[0])
@@ -230,58 +229,58 @@ class PNet(nn.Module):
                 point_count += 1
 
                 # -------------- Show ---------------- #
-                # Find index of max value
-                score_map_squeezed = torch.squeeze(score_map)
-                score_map_flattened = score_map_squeezed.view(-1)
-                # max_index_flattened = score_map_flattened.argmax(dim=0)
-                # max_index = torch.tensor([max_index_flattened / self.f_size_H, max_index_flattened % self.f_size_W]).cuda()
-                # max_index = max_index.int()
-                # print("eular distance:", (max_index_flattened[0] - drr_POI[2]) ** 2 + (max_index_flattened[1] - drr_POI[3]) ** 2)
-                print("original eular distance:", (drr_POI[0] - drr_POI[2]) ** 2 + (drr_POI[1] - drr_POI[3]) ** 2)
+                # # Find index of max value
+                # score_map_squeezed = torch.squeeze(score_map)
+                # score_map_flattened = score_map_squeezed.view(-1)
+                # # max_index_flattened = score_map_flattened.argmax(dim=0)
+                # # max_index = torch.tensor([max_index_flattened / self.f_size_H, max_index_flattened % self.f_size_W]).cuda()
+                # # max_index = max_index.int()
+                # # print("eular distance:", (max_index_flattened[0] - drr_POI[2]) ** 2 + (max_index_flattened[1] - drr_POI[3]) ** 2)
+                # print("original eular distance:", (drr_POI[0] - drr_POI[2]) ** 2 + (drr_POI[1] - drr_POI[3]) ** 2)
 
-                score_map_weight_squeezed = torch.squeeze(score_map_weight)
-                score_map_weight_show = score_map_weight_squeezed.cpu().data.numpy()
-                score_map_squeezed_show = score_map_squeezed.cpu().data.numpy()
-                score_map_gt_show = torch.squeeze(score_map_gt)
-                score_map_gt_show = score_map_gt_show.cpu().data.numpy()
-                feature_map1_divided_show = torch.mean(feature_map1_divided, dim=1)
-                feature_map1_divided_show = torch.squeeze(feature_map1_divided_show)
-                feature_map1_divided_show = feature_map1_divided_show.cpu().data.numpy()
-                feature_map2_divided_show = torch.mean(feature_map2_divided, dim=1)
-                feature_map2_divided_show = torch.squeeze(feature_map2_divided_show)
-                feature_map2_divided_show = feature_map2_divided_show.cpu().data.numpy()
-                max_index_show = max_index_flattened.cpu().data.numpy()
-                drr_POI_show = drr_POI.cpu().data.numpy()
-                input1 = torch.squeeze(self.input_drr1[batch_index])
-                input1_show = input1.cpu().data.numpy()
-                input2 = torch.squeeze(self.input_drr2[batch_index])
-                input2_show = input2.cpu().data.numpy()
-                plt.subplot(231)
-                plt.imshow(input1_show, cmap='gray')
-                plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+')
-                plt.title('DRR1')
-                plt.subplot(232)
-                plt.imshow(score_map_weight_show, cmap='gray')
-                plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+')
-                plt.title('wight map')
-                plt.subplot(233)
-                plt.imshow(score_map_gt_show, cmap='gray')
-                plt.title('point mask')
-                plt.subplot(234)
-                plt.imshow(input2_show, cmap='gray')
-                plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
-                plt.title('DRR2')
-                plt.subplot(235)
-                plt.imshow(feature_map2_divided_show, cmap='gray')
-                plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
-                plt.title('feature map')
-                plt.subplot(236)
-                plt.imshow(score_map_squeezed_show, cmap='gray')
-                plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+', cmap='orange')
-                plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x', cmap='orange')
-                plt.scatter([max_index_show[1]], [max_index_show[0]], marker='o', cmap='green')
-                plt.title('score map')
-                plt.show()
+                # score_map_weight_squeezed = torch.squeeze(score_map_weight)
+                # score_map_weight_show = score_map_weight_squeezed.cpu().data.numpy()
+                # score_map_squeezed_show = score_map_squeezed.cpu().data.numpy()
+                # score_map_gt_show = torch.squeeze(score_map_gt)
+                # score_map_gt_show = score_map_gt_show.cpu().data.numpy()
+                # feature_map1_divided_show = torch.mean(feature_map1_divided, dim=1)
+                # feature_map1_divided_show = torch.squeeze(feature_map1_divided_show)
+                # feature_map1_divided_show = feature_map1_divided_show.cpu().data.numpy()
+                # feature_map2_divided_show = torch.mean(feature_map2_divided, dim=1)
+                # feature_map2_divided_show = torch.squeeze(feature_map2_divided_show)
+                # feature_map2_divided_show = feature_map2_divided_show.cpu().data.numpy()
+                # max_index_show = max_index_flattened.cpu().data.numpy()
+                # drr_POI_show = drr_POI.cpu().data.numpy()
+                # input1 = torch.squeeze(self.input_drr1[batch_index])
+                # input1_show = input1.cpu().data.numpy()
+                # input2 = torch.squeeze(self.input_drr2[batch_index])
+                # input2_show = input2.cpu().data.numpy()
+                # plt.subplot(231)
+                # plt.imshow(input1_show, cmap='gray')
+                # plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+')
+                # plt.title('DRR1')
+                # plt.subplot(232)
+                # plt.imshow(score_map_weight_show, cmap='gray')
+                # plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+')
+                # plt.title('wight map')
+                # plt.subplot(233)
+                # plt.imshow(score_map_gt_show, cmap='gray')
+                # plt.title('point mask')
+                # plt.subplot(234)
+                # plt.imshow(input2_show, cmap='gray')
+                # plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
+                # plt.title('DRR2')
+                # plt.subplot(235)
+                # plt.imshow(feature_map2_divided_show, cmap='gray')
+                # plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
+                # plt.title('feature map')
+                # plt.subplot(236)
+                # plt.imshow(score_map_squeezed_show, cmap='gray')
+                # plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+', cmap='orange')
+                # plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x', cmap='orange')
+                # plt.scatter([max_index_show[1]], [max_index_show[0]], marker='o', cmap='green')
+                # plt.title('score map')
+                # plt.show()
             
             loss_batch = loss_batch / point_count
             self.loss_total += loss_batch
