@@ -28,18 +28,25 @@ class AlignDataSet(Base_DataSet):
     
     def load_file(self, data_path):
         hdf5 = h5py.File(data_path, 'r')
-        input_drr1 = np.asarray(hdf5['input_drr1'])
-        input_drr2 = np.asarray(hdf5['input_drr2'])
-        correspondence_2D = np.asarray(hdf5['correspondence_2D'])
-        input_drr1 = transform.resize(input_drr1, (64, 64))
-        input_drr2 = transform.resize(input_drr2, (64, 64))
-        correspondence_2D = correspondence_2D / (200 / 64)
-        correspondence_2D = correspondence_2D.astype(np.int64)
-        input_drr1 = np.expand_dims(input_drr1, 0)
-        input_drr2 = np.expand_dims(input_drr2, 0)
-        correspondence_2D = np.expand_dims(correspondence_2D, 0)
+        input_drr_ap = np.asarray(hdf5['input_drr_ap'])
+        input_xray_ap = np.asarray(hdf5['input_xray_ap'])
+        input_drr_lat = np.asarray(hdf5['input_drr_lat'])
+        input_xray_lat = np.asarray(hdf5['input_xray_lat'])
+        correspondence_2D_ap = np.asarray(hdf5['correspondence_2D_ap'])
+        correspondence_2D_lat = np.asarray(hdf5['correspondence_2D_lat'])
+        fiducial_3D = np.asarray(hdf5['fiducial_3D'])
+        # input_drr1 = transform.resize(input_drr1, (64, 64))
+        # input_drr2 = transform.resize(input_drr2, (64, 64))
+        # correspondence_2D = correspondence_2D / (200 / 64)
+        # correspondence_2D = correspondence_2D.astype(np.int64)
+        input_drr_ap = np.expand_dims(input_drr_ap, 0)
+        input_xray_ap = np.expand_dims(input_xray_ap, 0)
+        input_drr_lat = np.expand_dims(input_drr_lat, 0)
+        input_xray_lat = np.expand_dims(input_xray_lat, 0)
+        correspondence_2D_ap = np.expand_dims(correspondence_2D_ap, 0)
+        correspondence_2D_lat = np.expand_dims(correspondence_2D_lat, 0)
         hdf5.close()
-        return input_drr1, input_drr2, correspondence_2D
+        return input_drr_ap, input_xray_ap, correspondence_2D_ap, input_drr_lat, input_xray_lat, correspondence_2D_lat, fiducial_3D 
 
     def preprocess(self, input_drr):
         # Normalization
@@ -51,11 +58,14 @@ class AlignDataSet(Base_DataSet):
     '''
     def pull_item(self, item):
         data_path = self.get_data_path(self.dataset_root, self.data_list[item])
-        input_drr1, input_drr2, correspondence_2D = self.load_file(data_path)
-        input_drr1 = self.preprocess(input_drr1)
-        input_drr2 = self.preprocess(input_drr2)
+        input_drr_ap, input_xray_ap, correspondence_2D_ap, input_drr_lat, input_xray_lat, correspondence_2D_lat, fiducial_3D = \
+            self.load_file(data_path)
+        input_drr_ap = self.preprocess(input_drr_ap)
+        input_xray_ap = self.preprocess(input_xray_ap)
+        input_drr_lat = self.preprocess(input_drr_lat)
+        input_xray_lat = self.preprocess(input_xray_lat)
 
-        return input_drr1, input_drr2, correspondence_2D
+        return input_drr_ap, input_xray_ap, correspondence_2D_ap, input_drr_lat, input_xray_lat, correspondence_2D_lat, fiducial_3D
 
     
 

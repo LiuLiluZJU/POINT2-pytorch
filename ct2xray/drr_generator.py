@@ -145,13 +145,13 @@ projector_info = {'Name': 'SiddonGpu',
                   'DRRspacing_x': 1,
                   'DRRspacing_y': 1}
 
-data_path_list = os.listdir('/media/leko/Elements SE/LIDC-HDF5-256')
+data_path_list = os.listdir('/home/leko/POINT2-data/data_h5_cq500')
 data_count = 1
 
 for data_path in data_path_list:
     # Read CT
     # data_path = 'LIDC-IDRI-0001.20000101.3000566.1'
-    file_path = os.path.join('/media/leko/Elements SE/LIDC-HDF5-256', data_path, 'ct_xray_data.h5')
+    file_path = os.path.join('/home/leko/POINT2-data/data_h5_cq500', data_path, 'ct_xray_data.h5')
     h5_file = h5py.File(file_path, 'r')
     input_ct_array = h5_file['ct'][()].astype(np.float64)
     input_ct_array = input_ct_array[::-1, :, :]
@@ -170,12 +170,18 @@ for data_path in data_path_list:
     Z0 = movCenter[2] - movSpacing[2] * movSize[2] * 0.5
 
     # 设置位姿扰动值
-    d_alpha = random.uniform(-10, 10)
-    d_beta = random.uniform(-10, 10)
-    d_gamma = random.uniform(-10, 10)
-    d_x = random.uniform(-20, 20)
-    d_y = random.uniform(-20, 20)
-    d_z = random.uniform(-20, 20)
+    # d_alpha = random.uniform(-10, 10)
+    # d_beta = random.uniform(-10, 10)
+    # d_gamma = random.uniform(-10, 10)
+    # d_x = random.uniform(-20, 20)
+    # d_y = random.uniform(-20, 20)
+    # d_z = random.uniform(-20, 20)
+    d_alpha = 0
+    d_beta = 0
+    d_gamma = 0
+    d_x = 0
+    d_y = 0
+    d_z = 0
     d_params = np.array([d_alpha, d_beta, d_gamma, d_x, d_y, d_z])
     Tr_delta = get_rigid_motion_mat_from_euler(np.deg2rad(d_alpha), 'x', np.deg2rad(d_beta), 'y', np.deg2rad(d_gamma), 'z', d_x, d_y, d_z)
 
@@ -282,20 +288,29 @@ for data_path in data_path_list:
     projector.delete()
 
     # 随机生成3D参考点
-    correspondence_2D = []
+    correspondence_2D_ap = []
+    correspondence_2D_lat = []
+    fiducial_3D = []
     point_count = 0
     while(point_count < 20):
     
         fiducial_point = np.array([np.random.randint(0, 255, size=3)])
 
         # 参考点投影到2D平面
-        annotation_points_ap = projection2D(new_input_ct_image, fiducial_point, source, movCenter, sourceDRR_array_to_reshape, DRRspacing, DRRsize, Tr_ap)
-        annotation_points_lat = projection2D(new_input_ct_image, fiducial_point, source, movCenter, sourceDRR_array_to_reshape, DRRspacing, DRRsize, Tr_ap)
-        print(annotation_points_ap)
-        print(annotation_points_lat)
-        if (annotation_points_ap.any() and annotation_points_lat.any()):
-            annotation_points_zipped = np.hstack([annotation_points_ap, annotation_points_lat, fiducial_point])
-            correspondence_2D.append(annotation_points_zipped)
+        annotation_points_drr_ap = projection2D(new_input_ct_image, fiducial_point, source, movCenter, sourceDRR_array_to_reshape, DRRspacing, DRRsize, Tr_ap)
+        annotation_points_xray_ap = projection2D(new_input_ct_image, fiducial_point, source, movCenter, sourceDRR_array_to_reshape, DRRspacing, DRRsize, Tr_ap)
+        annotation_points_drr_lat = projection2D(new_input_ct_image, fiducial_point, source, movCenter, sourceDRR_array_to_reshape, DRRspacing, DRRsize, Tr_lat)
+        annotation_points_xray_lat = projection2D(new_input_ct_image, fiducial_point, source, movCenter, sourceDRR_array_to_reshape, DRRspacing, DRRsize, Tr_lat)
+
+        print(annotation_points_drr_ap)
+        print(annotation_points_drr_lat)
+        if (annotation_points_drr_ap.any() and annotation_points_xray_ap.any() and
+                annotation_points_drr_lat.any() and annotation_points_xray_lat.any()):
+            annotation_points_zipped_ap = np.hstack([annotation_points_drr_ap, annotation_points_xray_ap])
+            annotation_points_zipped_lat = np.hstack([annotation_points_drr_lat, annotation_points_xray_lat])
+            correspondence_2D_ap.append(annotation_points_zipped_ap)
+            correspondence_2D_lat.append(annotation_points_zipped_lat)
+            fiducial_3D.append(fiducial_point)
             point_count += 1
 
             # 简洁投影公式
@@ -333,20 +348,28 @@ for data_path in data_path_list:
             # X_3d = np.dot(np.linalg.pinv(A), b)
             # print(X_3d, X)
 
-    correspondence_2D = np.squeeze(np.asarray(correspondence_2D))
-    print(correspondence_2D)
+    correspondence_2D_ap = np.squeeze(np.asarray(correspondence_2D_ap))
+    correspondence_2D_lat = np.squeeze(np.asarray(correspondence_2D_lat))
+    fiducial_3D = np.squeeze(np.asarray(fiducial_3D))
+    print(correspondence_2D_ap)
+    print(correspondence_2D_lat)
+    print(fiducial_3D)
 
     # plt.subplot(121)
     # plt.imshow(drr1, cmap='gray')
-    # plt.scatter(correspondence_2D[:, 0], correspondence_2D[:, 1], marker='+')
+    # plt.scatter(correspondence_2D_ap[:, 0], correspondence_2D_ap[:, 1], marker='+')
     # plt.subplot(122)
     # plt.imshow(drr2, cmap='gray')
-    # plt.scatter(correspondence_2D[:, 2], correspondence_2D[:, 3], marker='x')
+    # plt.scatter(correspondence_2D_lat[:, 2], correspondence_2D_lat[:, 3], marker='x')
     # plt.show()
 
-    h5_file = h5py.File("/home/leko/POINT2-data/data_ap/" + str(data_count) + ".h5", 'w')
-    h5_file.create_dataset('input_drr1', data=drr1)
-    h5_file.create_dataset('input_drr2', data=drr1)
-    h5_file.create_dataset('correspondence_2D', data=correspondence_2D)
+    h5_file = h5py.File("/home/leko/POINT2-data/data_multiview_cq500/" + str(data_count) + ".h5", 'w')
+    h5_file.create_dataset('input_drr_ap', data=drr1)
+    h5_file.create_dataset('input_xray_ap', data=drr1)
+    h5_file.create_dataset('input_drr_lat', data=drr2)
+    h5_file.create_dataset('input_xray_lat', data=drr2)
+    h5_file.create_dataset('correspondence_2D_ap', data=correspondence_2D_ap)
+    h5_file.create_dataset('correspondence_2D_lat', data=correspondence_2D_lat)
+    h5_file.create_dataset('fiducial_3D', data=fiducial_3D)
     h5_file.close()
     data_count += 1

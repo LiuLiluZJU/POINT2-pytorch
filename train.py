@@ -8,11 +8,12 @@ import torch.nn as nn
 from torch import optim
 
 from lib.net.POINT_model import PNet
+from lib.net.POINT2_model import P2Net
 
 from lib.dataset.alignDataSet import AlignDataSet
 from torch.utils.data import DataLoader, random_split
 
-dir_data = "/home/leko/POINT2-data/data_ap/"
+dir_data = "/home/leko/POINT2-data/data_multiview/"
 dir_checkpoint = "./checkpoints/"
 
 def get_args():
@@ -58,20 +59,25 @@ def train_net(net,
         
         epoch_loss = 0
         batch_count = 0
-        for batch in val_loader:
+        for batch in train_loader:
             batch_count += 1
             print("Start {}th epoch, {}th batch!".format(epoch, batch_count))
 
-            input_drr1 = batch[0].to(device=device, dtype=torch.float32)
-            input_drr2 = batch[1].to(device=device, dtype=torch.float32)
-            correspondence_2D = batch[2].to(device=device, dtype=torch.float32)
+            input_drr_ap = batch[0].to(device=device, dtype=torch.float32)
+            input_xray_ap = batch[1].to(device=device, dtype=torch.float32)
+            correspondence_2D_ap = batch[2].to(device=device, dtype=torch.float32)
+            input_drr_lat = batch[3].to(device=device, dtype=torch.float32)
+            input_xray_lat = batch[4].to(device=device, dtype=torch.float32)
+            correspondence_2D_lat = batch[5].to(device=device, dtype=torch.float32)
+            fiducial_3D = batch[6].to(device=device, dtype=torch.float32)
             # print("shape:", input_drr1.shape, input_drr2.shape, correspondence_2D.shape)
 
-            net.set_input(input_drr1, input_drr2, correspondence_2D)
+            net.set_input(input_drr_ap, input_xray_ap, correspondence_2D_ap, 
+                            input_drr_lat, input_xray_lat, correspondence_2D_lat, fiducial_3D)
 
             net.optimize_parameters()
 
-        torch.save(net.state_dict(), 'checkpoint_{}.pth'.format(epoch))
+        torch.save(net.state_dict(), './checkpoints/checkpoint_{}.pth'.format(epoch))
 
 
 
@@ -79,9 +85,9 @@ if __name__ == '__main__':
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    net = PNet(device=device, n_channels=1, bilinear=True)
+    net = P2Net(device=device, n_channels=1, bilinear=True)
 
-    # net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_99.pth", map_location=device)))
+    # net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_33.pth", map_location=device)))
 
     net.to(device=device)
 
