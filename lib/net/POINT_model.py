@@ -105,10 +105,11 @@ class PNet(nn.Module):
             for point_index in range(self.point_num):
 
                 drr_POI = self.correspondence_2D[batch_index][0][point_index][0 : 4].clone()
-                drr_POI[0] = torch.floor(drr_POI[0] / self.factor_H)  # No need to multiply factor
-                drr_POI[1] = torch.floor(drr_POI[1] / self.factor_W)  # No need to multiply factor
-                drr_POI[2] = torch.floor(drr_POI[2] / self.factor_H)  # No need to multiply factor
-                drr_POI[3] = torch.floor(drr_POI[3] / self.factor_W)  # No need to multiply factor
+                drr_POI_reverse = torch.flip(drr_POI, dims=[0])
+                drr_POI[0] = torch.floor(drr_POI_reverse[2] / self.factor_H)  # No need to multiply factor
+                drr_POI[1] = torch.floor(drr_POI_reverse[3] / self.factor_W)  # No need to multiply factor
+                drr_POI[2] = torch.floor(drr_POI_reverse[0] / self.factor_H)  # No need to multiply factor
+                drr_POI[3] = torch.floor(drr_POI_reverse[1] / self.factor_W)  # No need to multiply factor
                 drr_POI = drr_POI.int()
                 
                 # extract feature
@@ -157,19 +158,20 @@ class PNet(nn.Module):
                     plt.subplot(221)
                     plt.imshow(input1_show, cmap='gray')
                     plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+')
-                    plt.title('DRR1')
+                    plt.title('DRR')
                     plt.subplot(223)
                     plt.imshow(input2_show, cmap='gray')
-                    plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
-                    plt.title('DRR2')
+                    # plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
+                    plt.scatter([max_index_show[1]], [max_index_show[0]], marker='o', cmap='green')
+                    plt.title('x-ray')
                     plt.subplot(222)
                     plt.imshow(feature_map2_divided_show, cmap='gray')
-                    plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
+                    # plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x')
                     plt.title('feature map')
                     plt.subplot(224)
                     plt.imshow(score_map_squeezed_show, cmap='gray')
                     plt.scatter([drr_POI_show[1]], [drr_POI_show[0]], marker='+', cmap='orange')
-                    plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x', cmap='orange')
+                    # plt.scatter([drr_POI_show[3]], [drr_POI_show[2]], marker='x', cmap='orange')
                     plt.scatter([max_index_show[1]], [max_index_show[0]], marker='o', cmap='green')
                     plt.title('score map')
                     fig.tight_layout()

@@ -53,10 +53,10 @@ class triangulation_layer(nn.Module):
 
                 max_index_ap = self.softArgmax(score_map_ap_devided)
                 max_index_ap = max_index_ap.view(-1)
-                max_index_ap = torch.flip(max_index_ap, dims=[0])
+                # max_index_ap = torch.flip(max_index_ap, dims=[0])
                 max_index_lat = self.softArgmax(score_map_lat_devided)
                 max_index_lat = max_index_lat.view(-1)
-                max_index_lat = torch.flip(max_index_lat, dims=[0])
+                # max_index_lat = torch.flip(max_index_lat, dims=[0])
 
                 max_index_ap[0] = max_index_ap[0] - self.s_size_W / 2
                 max_index_ap[1] = max_index_ap[1] - self.s_size_H / 2

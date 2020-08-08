@@ -13,7 +13,7 @@ from lib.net.POINT2_model import P2Net
 from lib.dataset.alignDataSet import AlignDataSet
 from torch.utils.data import DataLoader, random_split
 
-dir_data = "/home/leko/POINT2-data/data_multiview/"
+dir_data = "/home/liulilu/POINT2-data/data_multiview_cq500_train"
 dir_checkpoint = "./checkpoints/"
 
 def get_args():
@@ -77,7 +77,7 @@ def train_net(net,
 
             net.optimize_parameters()
 
-        torch.save(net.state_dict(), './checkpoints/checkpoint_{}.pth'.format(epoch))
+        torch.save(net.state_dict(), './checkpoints_cq500_with_triangle/checkpoint_{}.pth'.format(epoch))
 
 
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
     net = P2Net(device=device, n_channels=1, bilinear=True)
 
-    # net.load_state_dict((torch.load("/home/leko/POINT2-pytorch/checkpoint_33.pth", map_location=device)))
+    net.load_state_dict((torch.load("/home/liulilu/POINT2-pytorch/checkpoints_cq500_0807/checkpoint_99.pth", map_location=device)))
 
     net.to(device=device)
 

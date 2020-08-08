@@ -145,13 +145,13 @@ projector_info = {'Name': 'SiddonGpu',
                   'DRRspacing_x': 1,
                   'DRRspacing_y': 1}
 
-data_path_list = os.listdir('/home/leko/POINT2-data/data_h5_cq500')
+data_path_list = os.listdir('/media/leko/Elements SE/LIDC-HDF5-256')
 data_count = 1
 
 for data_path in data_path_list:
     # Read CT
     # data_path = 'LIDC-IDRI-0001.20000101.3000566.1'
-    file_path = os.path.join('/home/leko/POINT2-data/data_h5_cq500', data_path, 'ct_xray_data.h5')
+    file_path = os.path.join('/media/leko/Elements SE/LIDC-HDF5-256', data_path, 'ct_xray_data.h5')
     h5_file = h5py.File(file_path, 'r')
     input_ct_array = h5_file['ct'][()].astype(np.float64)
     input_ct_array = input_ct_array[::-1, :, :]
@@ -170,18 +170,12 @@ for data_path in data_path_list:
     Z0 = movCenter[2] - movSpacing[2] * movSize[2] * 0.5
 
     # 设置位姿扰动值
-    # d_alpha = random.uniform(-10, 10)
-    # d_beta = random.uniform(-10, 10)
-    # d_gamma = random.uniform(-10, 10)
-    # d_x = random.uniform(-20, 20)
-    # d_y = random.uniform(-20, 20)
-    # d_z = random.uniform(-20, 20)
-    d_alpha = 0
-    d_beta = 0
-    d_gamma = 0
-    d_x = 0
-    d_y = 0
-    d_z = 0
+    d_alpha = random.uniform(-10, 10)
+    d_beta = random.uniform(-10, 10)
+    d_gamma = random.uniform(-10, 10)
+    d_x = random.uniform(-20, 20)
+    d_y = random.uniform(-20, 20)
+    d_z = random.uniform(-20, 20)
     d_params = np.array([d_alpha, d_beta, d_gamma, d_x, d_y, d_z])
     Tr_delta = get_rigid_motion_mat_from_euler(np.deg2rad(d_alpha), 'x', np.deg2rad(d_beta), 'y', np.deg2rad(d_gamma), 'z', d_x, d_y, d_z)
 
@@ -314,39 +308,39 @@ for data_path in data_path_list:
             point_count += 1
 
             # 简洁投影公式
-            # fiducial_point_phy = \
-            #         np.multiply(fiducial_point, np.tile(movSpacing, (fiducial_point.shape[0], 1))) + \
-            #         np.tile(movOrigin, (fiducial_point.shape[0], 1))
-            # X = fiducial_point - movCenter
-            # d = 1800
-            # c = 900  # 注意：c表示成像系统在Rt变换前的中心（初始化为焦距的一半）
-            # K = np.array([[d, 0, 0],
-            #                 [0, d, 0],
-            #                 [0, 0, 1]])
-            # h = np.array([[0, 0, c]]).T
-            # Tr_ap_inv = np.linalg.inv(Tr_ap)
-            # R_view1 = Tr_ap_inv[0 : 3, 0 : 3]
-            # t_view1 = Tr_ap_inv[:3, 3].T
-            # x_dot1 = np.dot(K, np.dot(np.hstack([R_view1, np.array([t_view1]).T + h]), np.append(X, 1).T))
-            # x_dot1 = (x_dot1 / x_dot1[-1])[:2]
-            # point_dot1 = x_dot1[:2] + np.array([127.5, 127.5])
-            # print(point_dot1)
-            # Tr_lat_inv = np.linalg.inv(Tr_lat)
-            # R_view2 = Tr_lat_inv[0 : 3, 0 : 3]
-            # t_view2 = Tr_lat_inv[:3, 3].T
-            # x_dot2 = np.dot(K, np.dot(np.hstack([R_view2, np.array([t_view2]).T + h]), np.append(X, 1).T))
-            # x_dot2 = (x_dot2 / x_dot2[-1])[:2]
-            # point_dot2 = x_dot2[:2] + np.array([127.5, 127.5])
-            # print(point_dot2)
+            fiducial_point_phy = \
+                    np.multiply(fiducial_point, np.tile(movSpacing, (fiducial_point.shape[0], 1))) + \
+                    np.tile(movOrigin, (fiducial_point.shape[0], 1))
+            X = fiducial_point - movCenter
+            d = 1800
+            c = 900  # 注意：c表示成像系统在Rt变换前的中心（初始化为焦距的一半）
+            K = np.array([[d, 0, 0],
+                            [0, d, 0],
+                            [0, 0, 1]])
+            h = np.array([[0, 0, c]]).T
+            Tr_ap_inv = np.linalg.inv(Tr_ap)
+            R_view1 = Tr_ap_inv[0 : 3, 0 : 3]
+            t_view1 = Tr_ap_inv[:3, 3].T
+            x_dot1 = np.dot(K, np.dot(np.hstack([R_view1, np.array([t_view1]).T + h]), np.append(X, 1).T))
+            x_dot1 = (x_dot1 / x_dot1[-1])[:2]
+            point_dot1 = x_dot1[:2] + np.array([127.5, 127.5])
+            print(point_dot1)
+            Tr_lat_inv = np.linalg.inv(Tr_lat)
+            R_view2 = Tr_lat_inv[0 : 3, 0 : 3]
+            t_view2 = Tr_lat_inv[:3, 3].T
+            x_dot2 = np.dot(K, np.dot(np.hstack([R_view2, np.array([t_view2]).T + h]), np.append(X, 1).T))
+            x_dot2 = (x_dot2 / x_dot2[-1])[:2]
+            point_dot2 = x_dot2[:2] + np.array([127.5, 127.5])
+            print(point_dot2)
 
-            # D_x1 = np.hstack([np.array([[-d, 0], [0, -d]]), np.array([x_dot1]).T])
-            # D_x2 = np.hstack([np.array([[-d, 0], [0, -d]]), np.array([x_dot2]).T])
+            D_x1 = np.hstack([np.array([[-d, 0], [0, -d]]), np.array([x_dot1]).T])
+            D_x2 = np.hstack([np.array([[-d, 0], [0, -d]]), np.array([x_dot2]).T])
 
-            # A = np.squeeze(np.hstack([[np.dot(D_x1, R_view1)], [np.dot(D_x2, R_view2)]]))
-            # b = np.hstack([-c * x_dot1 - np.dot(D_x1, t_view1), -c * x_dot2 - np.dot(D_x2, t_view2)])
+            A = np.squeeze(np.hstack([[np.dot(D_x1, R_view1)], [np.dot(D_x2, R_view2)]]))
+            b = np.hstack([-c * x_dot1 - np.dot(D_x1, t_view1), -c * x_dot2 - np.dot(D_x2, t_view2)])
 
-            # X_3d = np.dot(np.linalg.pinv(A), b)
-            # print(X_3d, X)
+            X_3d = np.dot(np.linalg.pinv(A), b)
+            print(X_3d, X)
 
     correspondence_2D_ap = np.squeeze(np.asarray(correspondence_2D_ap))
     correspondence_2D_lat = np.squeeze(np.asarray(correspondence_2D_lat))
@@ -363,7 +357,7 @@ for data_path in data_path_list:
     # plt.scatter(correspondence_2D_lat[:, 2], correspondence_2D_lat[:, 3], marker='x')
     # plt.show()
 
-    h5_file = h5py.File("/home/leko/POINT2-data/data_multiview_cq500/" + str(data_count) + ".h5", 'w')
+    h5_file = h5py.File("/home/leko/POINT2-data/data_multiview/" + str(data_count) + ".h5", 'w')
     h5_file.create_dataset('input_drr_ap', data=drr1)
     h5_file.create_dataset('input_xray_ap', data=drr1)
     h5_file.create_dataset('input_drr_lat', data=drr2)
